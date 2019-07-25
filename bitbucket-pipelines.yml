@@ -1,0 +1,28 @@
+image: xueshanf/awscli
+options:
+  docker: true
+
+shared:
+  build_image_step: &build_image_step
+    name: Build Image
+    script:
+      - docker build --pull .
+    caches:
+      - docker
+
+pipelines:
+  default:
+    - step: *build_image_step
+  branches:
+    master:
+      - step: *build_image_step
+      - step:
+          name: Deploy
+          trigger: manual
+          deployment: production
+          script:
+            - eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
+            - docker build --pull -t ${IMAGE_PATH} .
+            - docker push ${IMAGE_PATH}
+          caches:
+            - docker
