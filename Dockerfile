@@ -1,22 +1,17 @@
-FROM alpine:3.10
+FROM python:3.8.0-alpine3.10
 MAINTAINER Richard Selby <richard.selby@york.ac.uk>
 
-# Install AWS CLI
-# From https://github.com/xueshanf/docker-awscli/blob/master/Dockerfile
-RUN apk --no-cache add \ 
-      bash \
-      curl \
-      less \
-      groff \
-      jq \
-      git \
-      python \
-      py-pip \
-      py2-pip && \
-      pip install --upgrade pip awscli s3cmd && \
-      mkdir /root/.aws
-
-# Install docker-compose
+# Additional requirements for docker-compose
 # From https://wiki.alpinelinux.org/wiki/Docker#Docker_Compose
-RUN apk --no-cache add python-dev libffi-dev openssl-dev gcc libc-dev make
-RUN pip install docker-compose
+RUN apk --no-cache add \
+    gcc \
+    libc-dev \
+    libffi-dev \
+    make \
+    openssl-dev \
+    python-dev
+
+RUN pip install --no-cache-dir awscli s3cmd
+RUN pip install --no-cache-dir docker-compose
+
+RUN mkdir /root/.aws
