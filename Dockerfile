@@ -1,4 +1,4 @@
-FROM alpine:3.10
+FROM alpine:3.11
 MAINTAINER Richard Selby <richard.selby@york.ac.uk>
 
 # Additional requirements for docker-compose
@@ -10,7 +10,8 @@ RUN apk --no-cache add \
     make \
     openssl-dev \
     python3-dev \
-    python3
+    python3 \
+    jq
 
 RUN pip3 install --no-cache-dir --upgrade pip
 RUN pip3 install --no-cache-dir awscli s3cmd
