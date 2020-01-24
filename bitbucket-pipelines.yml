@@ -21,10 +21,9 @@ pipelines:
           trigger: manual
           deployment: production
           script:
-            - apk add python3
-            - pip3 install awscli
+            - apk add python3 && pip3 install awscli
             - eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
-            - docker build --pull -t ${IMAGE_PATH} .
-            - docker push ${IMAGE_PATH}
+            - docker build --pull -t ${IMAGE_PATH}:docker-compose .
+            - docker push ${IMAGE_PATH}:docker-compose
           caches:
             - docker

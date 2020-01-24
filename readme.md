@@ -1,27 +1,51 @@
-# aws-cli / docker-compose Docker Image
+# Bitbucket Pipeline Build Environments
 
-The Teaching Portal pipeline requires both `aws-cli` and `docker-compose`, so here is a base image to use.
+Useful images to use in bitbucket pipelines.
 
-## Using the image
+### When to use these images?
+
+Bitbucket [won't cache private images](https://community.atlassian.com/t5/Bitbucket-questions/A-cache-for-custom-private-pipeline-image/qaq-p/1110065).
+So only use these images when there is no suitable public image from a reputable source
+(see the [policy](https://wiki.york.ac.uk/pages/viewpage.action?pageId=176922236)) that does what you want;
+or when adding your required tools to an existing image takes longer than the download from a private repo (~10s).
+
+For example - installing aws-cli on alpine linux takes a couple of seconds:
+
+```
+- apk add python3
+- pip3 install awscli
+```
+
+This is much quicker than using a private image.
+
+Don't forget - you can use different images for different steps.
+
+### Using the images
 
 AWS credentials must be provided to download the image.
-A user should be set up with the appropriate access and the access keys saved to the Repository variables settings in the bitbucket repository. 
+A user should be set up with the appropriate access and the access keys saved to the Repository variables settings in the bitbucket repository.
+
+If a pipeline is doing other things with AWS (e.g. cloudformation),
+it might be sensible to provide two sets of AWS credentials;
+the defaults (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`) for within
+the pipeline, and separate `BUILD_ENVIRONMENT` keys that can just access
+the docker image:
 
 ```
 image:
-  name: <id>.dkr.ecr.eu-west-1.amazonaws.com/docker-aws-cli-compose:latest
+  name: <id>.dkr.ecr.eu-west-1.amazonaws.com/<name>:latest
   aws:
-    access-key: $AWS_ACCESS_KEY_ID
-    secret-key: $AWS_SECRET_ACCESS_KEY
+    access-key: $AWS_BUILD_ENVIRONMENT_ACCESS_KEY_ID
+    secret-key: $AWS_BUILD_ENVIRONMENT_SECRET_ACCESS_KEY
 ```
 
-The `aws` command expects the following environment variables to be defined:
-* `AWS_ACCESS_KEY_ID`
-* `AWS_SECRET_ACCESS_KEY`
+## `aws-cli` and `docker-compose`
 
-This does not add `docker` itself; that must still be declared as a service in your pipelines configuration.
+`docker-compose` is slow to install, so we have a base image with that and `aws-cli`.
 
-This can be done globally:
+### Using this image
+
+To use `docker-compose` in a pipeline, you must also declare docker as a service. This can be done globally:
 
 ```
 options:
@@ -37,13 +61,3 @@ pipelines:
         services:
           - docker
 ```
-
-## Background
-
-* `aws-cli`
-  * Required for logging into docker before pushing/pulling images from an ECR instance.
-    * `eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)`
-* `docker-compose`
-  * Running tests in a docker container that need to talk to a database is tricky if the database is defined as a service; 
-    it's easier to define a `docker-compose` configuration with the test image and the database so they can communicate.
-
