@@ -23,7 +23,9 @@ pipelines:
           script:
             - apk add python3 && pip3 install awscli
             - eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
-            - docker build --pull -t ${IMAGE_PATH}:docker-compose .
+            - docker build --pull -t ${IMAGE_PATH}:docker-compose docker-compose
             - docker push ${IMAGE_PATH}:docker-compose
+            - docker build --pull -t ${IMAGE_PATH}:aws-sam-cli aws-sam-cli
+            - docker push ${IMAGE_PATH}:aws-sam-cli
           caches:
             - docker
