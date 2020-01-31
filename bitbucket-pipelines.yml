@@ -4,9 +4,10 @@ options:
 
 shared:
   build_image_step: &build_image_step
-    name: Build Image
+    name: Build Images
     script:
-      - docker build --pull .
+      - docker build --pull aws-sam-cli
+      - docker build --pull docker-compose
     caches:
       - docker
 
@@ -23,9 +24,9 @@ pipelines:
           script:
             - apk add python3 && pip3 install awscli
             - eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
-            - docker build --pull -t ${IMAGE_PATH}:docker-compose docker-compose
-            - docker push ${IMAGE_PATH}:docker-compose
             - docker build --pull -t ${IMAGE_PATH}:aws-sam-cli aws-sam-cli
             - docker push ${IMAGE_PATH}:aws-sam-cli
+            - docker build --pull -t ${IMAGE_PATH}:docker-compose docker-compose
+            - docker push ${IMAGE_PATH}:docker-compose
           caches:
             - docker
