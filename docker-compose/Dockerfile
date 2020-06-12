@@ -1,5 +1,5 @@
-FROM alpine:3.11
-MAINTAINER Richard Selby <richard.selby@york.ac.uk>
+FROM alpine:3.12
+MAINTAINER Rick Selby <richard.selby@york.ac.uk>
 
 # Install aws-cli
 RUN apk --no-cache add py3-pip
