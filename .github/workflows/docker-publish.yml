@@ -2,68 +2,56 @@ name: Docker
 
 on:
   push:
-    # Publish `master` as Docker `latest` image.
     branches:
       - master
-
-    # Publish `v1.2.3` tags as releases.
     tags:
-      - v*
-
-  # Run tests for any PRs.
+      - *
   pull_request:
 
 jobs:
-  # Run tests.
-  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
   test:
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ['aws-sam-cli', 'docker-compose']
+
+    name: Build ${{ matrix.image }}
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run tests
-        run: |
-          docker build --pull aws-sam-cli
-          docker build --pull docker-compose
+      - name: Build ${{ matrix.image }}
+        uses: docker/build-push-action@v1
+        with:
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}/${{ matrix.image }}
+          path: ${{ matrix.image }}
+          push: false
           
-  # Push image to GitHub Packages.
-  # See also https://docs.docker.com/docker-hub/builds/
   push:
-    # Ensure test job passes before pushing image.
     needs: test
 
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ['aws-sam-cli', 'docker-compose']
+
+    name: Build and Push ${{ matrix.image }}
+
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build image
-        run: |
-          docker build --pull aws-sam-cli --tag aws-sam-cli
-          docker build --pull docker-compose --tag docker-compose
-
-      - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-
-      - name: Push image
-        run: |
-          IMAGE_PATH=docker.pkg.github.com/${{ github.repository }}
-
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
-
-          echo VERSION=$VERSION
-
-          docker tag aws-sam-cli $IMAGE_PATH/aws-sam-cli:$VERSION
-          docker push $IMAGE_PATH/aws-sam-cli:$VERSION
-          
-          docker tag docker-compose $IMAGE_PATH/docker-compose:$VERSION
-          docker push $IMAGE_PATH/docker-compose:$VERSION
+      - name: Build and push ${{ matrix.image }}
+        uses: docker/build-push-action@v1
+        with:
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}/${{ matrix.image }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          tag_with_ref: true
+          path: ${{ matrix.image }}
