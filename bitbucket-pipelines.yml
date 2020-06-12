@@ -1,0 +1,32 @@
+image: alpine:3.11
+options:
+  docker: true
+
+shared:
+  build_image_step: &build_image_step
+    name: Build Images
+    script:
+      - docker build --pull aws-sam-cli
+      - docker build --pull docker-compose
+    caches:
+      - docker
+
+pipelines:
+  default:
+    - step: *build_image_step
+  branches:
+    master:
+      - step: *build_image_step
+      - step:
+          name: Deploy
+          trigger: manual
+          deployment: production
+          script:
+            - apk add python3 && pip3 install awscli
+            - eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
+            - docker build --pull -t ${IMAGE_PATH}:aws-sam-cli aws-sam-cli
+            - docker push ${IMAGE_PATH}:aws-sam-cli
+            - docker build --pull -t ${IMAGE_PATH}:docker-compose docker-compose
+            - docker push ${IMAGE_PATH}:docker-compose
+          caches:
+            - docker
