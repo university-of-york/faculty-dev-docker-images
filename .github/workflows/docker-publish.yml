@@ -41,9 +41,8 @@ jobs:
 
       - name: Build image
         run: |
-          IMAGE_PATH=docker.pkg.github.com/${{ github.repository }}
-          docker build --pull aws-sam-cli --tag $IMAGE_PATH/aws-sam-cli
-          docker build --pull docker-compose --tag $IMAGE_PATH/docker-compose
+          docker build --pull aws-sam-cli --tag aws-sam-cli
+          docker build --pull docker-compose --tag docker-compose
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
