@@ -17,6 +17,7 @@ jobs:
         image: ['aws-sam-cli', 'docker-compose', 'lambci-ruby-postres']
     name: Build ${{ matrix.image }}
     steps:
+      - uses: actions/checkout@v2
       - name: Build ${{ matrix.image }}
         uses: docker/build-push-action@v2
         with:
@@ -35,6 +36,7 @@ jobs:
         image: ['aws-sam-cli', 'docker-compose', 'lambci-ruby-postres']
     name: Build and Push ${{ matrix.image }}
     steps:
+      - uses: actions/checkout@v2
       - name: Build and push ${{ matrix.image }}
         uses: docker/build-push-action@v2
         with:
