@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: ['aws-sam-cli', 'docker-compose']
+        image: ['aws-sam-cli', 'docker-compose', 'lambci-ruby-postres']
     name: Build ${{ matrix.image }}
     steps:
       - name: Build ${{ matrix.image }}
