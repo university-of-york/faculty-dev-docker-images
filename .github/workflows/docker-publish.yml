@@ -52,4 +52,5 @@ jobs:
         with:
           context: ${{ matrix.image }}
           pull: true
+          push: true
           tags: ghcr.io/${{ github.repository }}/${{ matrix.image }}:latest
