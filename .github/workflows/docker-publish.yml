@@ -3,57 +3,41 @@ name: Docker
 on:
   push:
     branches:
-      - master
-    tags:
-      - '*'
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
         image: ['aws-sam-cli', 'docker-compose']
-
     name: Build ${{ matrix.image }}
-
     steps:
-      - uses: actions/checkout@v2
-
       - name: Build ${{ matrix.image }}
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2
         with:
-          registry: docker.pkg.github.com
-          repository: ${{ github.repository }}/${{ matrix.image }}
-          path: ${{ matrix.image }}
+          pull: true
+          context: ${{ matrix.image }}
           push: false
+          tags: ${{ github.repository }}/${{ matrix.image }}:latest
           
   push:
     needs: test
-
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-
+    if: github.ref == 'refs/heads/main'
     strategy:
       fail-fast: false
       matrix:
-        image: ['aws-sam-cli', 'docker-compose']
-
+        image: ['aws-sam-cli', 'docker-compose', 'lambci-ruby-postres']
     name: Build and Push ${{ matrix.image }}
-
     steps:
-      - uses: actions/checkout@v2
-
       - name: Build and push ${{ matrix.image }}
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2
         with:
-          registry: docker.pkg.github.com
-          repository: ${{ github.repository }}/${{ matrix.image }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          tag_with_ref: true
-          path: ${{ matrix.image }}
+          context: ${{ matrix.image }}
+          pull: true
+          tags: ${{ github.repository }}/${{ matrix.image }}:latest
