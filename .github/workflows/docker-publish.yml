@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: ['aws-sam-cli', 'docker-compose', 'lambci-ruby-postres']
+        image: ['lambci-ruby-postgres']
     name: Build ${{ matrix.image }}
     steps:
       - uses: actions/checkout@v2
@@ -33,7 +33,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: ['aws-sam-cli', 'docker-compose', 'lambci-ruby-postres']
+        image: ['lambci-ruby-postgres']
     name: Build and Push ${{ matrix.image }}
     steps:
       - uses: actions/checkout@v2
