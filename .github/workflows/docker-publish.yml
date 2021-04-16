@@ -26,31 +26,7 @@ jobs:
       - name: Build ${{ matrix.image }}
         uses: docker/build-push-action@v2
         with:
-          pull: true
-          context: ${{ matrix.image }}
-          push: false
-          tags: ghcr.io/${{ github.repository }}/${{ matrix.image }}:latest
-          
-  push:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    strategy:
-      fail-fast: false
-      matrix:
-        image: ['lambci-ruby2.7-postgres']
-    name: Build and Push ${{ matrix.image }}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push ${{ matrix.image }}
-        uses: docker/build-push-action@v2
-        with:
           context: ${{ matrix.image }}
           pull: true
-          push: true
+          push: ${{ github.ref == 'refs/heads/main' }}
           tags: ghcr.io/${{ github.repository }}/${{ matrix.image }}:latest
