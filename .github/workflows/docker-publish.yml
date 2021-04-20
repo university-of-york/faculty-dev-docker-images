@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - main
+  schedule:
+    - cron:  '30 6 * * MON-FRI'
 
 jobs:
   test:
@@ -14,8 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: ['lambci-ruby2.7-postgres']
-    name: Build ${{ matrix.image }}
+        ruby: ['2.7']
+    name: Build aws-lambda-ruby:${{ matrix.ruby }}
     steps:
       - uses: actions/checkout@v2
       - uses: docker/login-action@v1
@@ -23,10 +25,10 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build ${{ matrix.image }}
+      - name: Build image
         uses: docker/build-push-action@v2
         with:
-          context: ${{ matrix.image }}
+          context: aws-lambda-ruby/${{ matrix.ruby }}
           pull: true
           push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/${{ github.repository }}/${{ matrix.image }}:latest
+          tags: ghcr.io/${{ github.repository }}/aws-lambda-ruby:${{ matrix.ruby }}
