@@ -6,14 +6,14 @@ Useful images to use in workflows.
 
 ### CI
 
-#### ghcr.io/university-of-york/faculty-dev-ci-images/ci/aws-lambda-ruby-postgres:2.7
+#### ghcr.io/university-of-york/faculty-dev-docker-images/ci/aws-lambda-ruby-postgres:2.7
 
 This should be identical to the image used in AWS lambdas. Run your tests in this image where possible.
 
 We are including the [shared lambda layer](https://wiki.york.ac.uk/display/CLOUD/AWS%3A+Shared+Lambda+Layers)
 provided by SYS to match the production environment.
 
-#### ghcr.io/university-of-york/faculty-dev-ci-images/ci/aws-lambda-ruby-dev:2.7
+#### ghcr.io/university-of-york/faculty-dev-docker-images/ci/aws-lambda-ruby-dev:2.7
 
 This is the base AWS ruby lambda with tools installed that allow us to install and build gems. 
 
@@ -21,7 +21,7 @@ Feel free to add additional tooling to this image as required.
 
 ### Local Dev
 
-#### ghcr.io/university-of-york/faculty-dev-ci-images/local-dev/aws-lambda-ruby-dev:2.7
+#### ghcr.io/university-of-york/faculty-dev-docker-images/local-dev/aws-lambda-ruby-dev:2.7
 
 This is the dev CI image tweaked for local development work (with docker-compose).
 
@@ -30,7 +30,7 @@ install the gems, and the app can use them (see
 [sinatra-base](https://github.com/university-of-york/faculty-dev-sinatra-base/blob/main/docker-compose.yml))
 for an example).
 
-#### ghcr.io/university-of-york/faculty-dev-ci-images/local-dev/aws-lambda-ruby-postgres:2.7
+#### ghcr.io/university-of-york/faculty-dev-docker-images/local-dev/aws-lambda-ruby-postgres:2.7
 
 This is the postgres CI image tweaked for local development work.
 
