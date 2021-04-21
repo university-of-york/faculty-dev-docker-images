@@ -11,7 +11,7 @@ on:
     - cron:  '30 6 * * MON-FRI'
 
 jobs:
-  ruby-dev-image:
+  ruby-dev-images:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -32,6 +32,29 @@ jobs:
         run: get-dependencies.sh
         if: hashFiles(${{ matrix.image }}/${{ matrix.ruby }}/get-dependencies.sh) != ''
         working-directory: ${{ matrix.image }}/${{ matrix.ruby }}
+      - uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build image
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ matrix.image }}/${{ matrix.ruby }}
+          pull: true
+          push: ${{ github.ref == 'refs/heads/main' }}
+          tags: ghcr.io/${{ github.repository }}/${{ matrix.image }}:${{ matrix.ruby }}
+  ruby-local-images:
+    runs-on: ubuntu-latest
+    needs: ruby-dev-images
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [aws-lambda-ruby-builder, aws-lambda-ruby-local]
+        ruby: [2.7]
+    name: Build ${{ matrix.image }}:${{ matrix.ruby }}
+    steps:
+      - uses: actions/checkout@v2
       - uses: docker/login-action@v1
         with:
           registry: ghcr.io
