@@ -28,7 +28,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
-      - name: Download lambda layer
+      - name: Get image dependencies
         run: get-dependencies.sh
         if: hashFiles(${{ matrix.image }}/${{ matrix.ruby }}/get-dependencies.sh) != ''
         working-directory: ${{ matrix.image }}/${{ matrix.ruby }}
