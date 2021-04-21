@@ -1,6 +1,6 @@
 FROM public.ecr.aws/lambda/ruby:2.7
 
-RUN yum install -y postgresql-devel wget make gcc gcc-c++ \
+RUN yum install -y postgresql-devel wget make gcc gcc-c++ git \
  && yum clean all \
  && rm -rf /var/cache/yum
 
