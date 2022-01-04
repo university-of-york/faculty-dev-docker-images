@@ -8,6 +8,13 @@ RUN yum install -y postgresql-devel wget make gcc gcc-c++ git \
 # Don't complain if bundler is run as root
 ENV BUNDLE_SILENCE_ROOT_WARNING=1
 
+# Install GitHub CLI for actions
+RUN yum install -y yum-utils \
+ && yum-config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo \
+ && yum install -y gh \
+ && yum clean all \
+ && rm -rf /var/cache/yum
+
 # Override default lambda entrypoint
 ENTRYPOINT []
 
