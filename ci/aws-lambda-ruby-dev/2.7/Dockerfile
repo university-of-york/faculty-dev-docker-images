@@ -1,5 +1,7 @@
 FROM public.ecr.aws/lambda/ruby:2.7
 
+ENV TZ=Europe/London
+
 # Install tools used when installing / building gems
 RUN yum install -y postgresql-devel wget make gcc gcc-c++ git \
  && yum clean all \
