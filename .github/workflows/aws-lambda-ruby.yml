@@ -32,7 +32,7 @@ jobs:
         run: ./get-dependencies.sh
         if: hashFiles(format('ci/{0}/{1}/get-dependencies.sh', matrix.image, matrix.ruby)) != ''
         working-directory: ci/${{ matrix.image }}/${{ matrix.ruby }}
-      - uses: docker/login-action@v1
+      - uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -55,7 +55,7 @@ jobs:
     name: Build local-dev/${{ matrix.image }}:${{ matrix.ruby }}
     steps:
       - uses: actions/checkout@v3
-      - uses: docker/login-action@v1
+      - uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
