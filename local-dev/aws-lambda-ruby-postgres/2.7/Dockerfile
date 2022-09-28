@@ -17,4 +17,4 @@ ENV GEM_PATH /bundle
 ENV BUNDLE_PATH /bundle
 
 # Start server using rerun to reload if code changes are detected
-CMD ["rerun", "--background", "bundle", "exec", "rackup --host 0.0.0.0"]
+CMD ["rerun", "--background", "bundle", "exec", "rackup --host 0.0.0.0 --quiet"]
