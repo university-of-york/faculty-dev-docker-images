@@ -15,6 +15,7 @@ EXPOSE 9292
 # Use /bundle for gems
 ENV GEM_PATH /bundle
 ENV BUNDLE_PATH /bundle
+ENV BUNDLE_CLEAN true
 
 # Start server using rerun to reload if code changes are detected
 CMD ["rerun", "--background", "bundle", "exec", "rackup --host 0.0.0.0 --quiet"]
