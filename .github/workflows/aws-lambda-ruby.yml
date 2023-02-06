@@ -11,9 +11,6 @@ on:
     - cron:  '30 6 * * MON-FRI'
   workflow_dispatch:
 
-permissions:
-  actions: write
-
 jobs:
   ruby-dev-images:
     runs-on: ubuntu-latest
