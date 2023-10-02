@@ -11,6 +11,10 @@ on:
     - cron:  '30 6 * * MON-FRI'
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   ruby-dev-images:
     runs-on: ubuntu-latest
@@ -26,8 +30,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         if: hashFiles(format('ci/{0}/{1}/get-dependencies.sh', matrix.image, matrix.ruby)) != ''
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ vars.LINUX_LAYER_ROLE_ARN }}
+          role-duration-seconds: 1800
           aws-region: eu-west-1
       - name: Get image dependencies
         run: ./get-dependencies.sh
