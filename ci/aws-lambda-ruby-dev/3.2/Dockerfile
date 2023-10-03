@@ -1,7 +1,7 @@
 FROM public.ecr.aws/lambda/ruby:3.2
 
 # Install tools used when installing / building gems
-RUN yum install -y postgresql-devel sqlite-devel wget make gcc gcc-c++ git \
+RUN yum install -y postgresql-devel sqlite-devel openssl-devel wget make gcc gcc-c++ git \
  && yum clean all \
  && rm -rf /var/cache/yum
 
