@@ -1,4 +1,4 @@
-FROM amazonlinux:2023
+FROM public.ecr.aws/amazonlinux/amazonlinux:2023
 
 # Don't complain if bundler is run as root
 ENV BUNDLE_SILENCE_ROOT_WARNING=1
