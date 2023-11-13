@@ -16,7 +16,9 @@ RUN yum install -y amazon-linux-extras yum-utils \
   gcc \
   gcc-c++ \
   git \
-  gh
+  gh \
+  && yum clean all \
+  && rm -rf /var/cache/yum
 
 RUN gem install bundler
 
