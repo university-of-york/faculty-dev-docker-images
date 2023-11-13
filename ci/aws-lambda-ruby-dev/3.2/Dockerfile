@@ -1,14 +1,15 @@
-FROM public.ecr.aws/amazonlinux/amazonlinux:2023
+FROM public.ecr.aws/lambda/ruby:3.2
 
 # Don't complain if bundler is run as root
 ENV BUNDLE_SILENCE_ROOT_WARNING=1
 
-RUN dnf install -y ruby \
-  ruby-devel
+RUN yum install -y amazon-linux-extras
 
-RUN dnf install -y \
-  postgresql15 \
-  postgresql15-private-devel \
+RUN amazon-linux-extras enable postgresql14
+
+RUN yum install -y \
+  postgresql14 \
+  postgresql14-private-devel \
   sqlite-devel \
   openssl-devel \
   wget \
@@ -16,8 +17,6 @@ RUN dnf install -y \
   gcc \
   gcc-c++ \
   git
-
-RUN dnf clean all
 
 RUN gem install bundler
 
