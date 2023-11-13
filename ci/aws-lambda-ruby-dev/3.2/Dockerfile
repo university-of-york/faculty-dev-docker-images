@@ -3,20 +3,20 @@ FROM public.ecr.aws/lambda/ruby:3.2
 # Don't complain if bundler is run as root
 ENV BUNDLE_SILENCE_ROOT_WARNING=1
 
-RUN yum install -y amazon-linux-extras
-
-RUN amazon-linux-extras enable postgresql14
-
-RUN yum install -y \
-  postgresql14 \
-  postgresql14-private-devel \
+RUN yum install -y amazon-linux-extras yum-utils \
+  && yum-config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo \
+  && amazon-linux-extras enable postgresql14 \
+  && yum install -y \
+  postgresql \
+  postgresql-devel \
   sqlite-devel \
   openssl-devel \
   wget \
   make \
   gcc \
   gcc-c++ \
-  git
+  git \
+  gh
 
 RUN gem install bundler
 
