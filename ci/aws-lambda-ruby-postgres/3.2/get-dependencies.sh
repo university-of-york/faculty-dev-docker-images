@@ -2,7 +2,7 @@
 
 # Gets a zip file for the given lambda layer ARN
 
-LAYER_ARN=arn:aws:lambda:eu-west-1:326340845860:layer:sys-layer-ruby-pg:5
+LAYER_ARN=arn:aws:lambda:eu-west-1:326340845860:layer:sys-layer-ruby-pg:8
 URL=$(aws lambda get-layer-version-by-arn --arn $LAYER_ARN --query Content.Location --output text)
 curl -s $URL -o sys-layer-ruby-pg.zip
 
