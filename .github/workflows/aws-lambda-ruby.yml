@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         if: hashFiles(format('ci/{0}/{1}/get-dependencies.sh', matrix.image, matrix.ruby)) != ''
         with:
           role-to-assume: ${{ vars.LINUX_LAYER_ROLE_ARN }}
