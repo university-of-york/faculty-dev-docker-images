@@ -26,7 +26,7 @@ jobs:
         ruby: [2.7, 3.2]
     name: Build ci/${{ matrix.image }}:${{ matrix.ruby }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         if: hashFiles(format('ci/{0}/{1}/get-dependencies.sh', matrix.image, matrix.ruby)) != ''
@@ -60,7 +60,7 @@ jobs:
         ruby: [2.7, 3.2]
     name: Build local-dev/${{ matrix.image }}:${{ matrix.ruby }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: docker/login-action@v2
         with:
           registry: ghcr.io
