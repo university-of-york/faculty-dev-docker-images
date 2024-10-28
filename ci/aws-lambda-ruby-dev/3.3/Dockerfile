@@ -1,4 +1,3 @@
-FROM ubuntu:latest
 FROM public.ecr.aws/lambda/ruby:3.3
 
 # Don't complain if bundler is run as root
