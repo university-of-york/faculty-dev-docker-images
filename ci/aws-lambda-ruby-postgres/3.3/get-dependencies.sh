@@ -2,7 +2,7 @@
 
 # Gets a zip file for the given lambda layer ARN
 
-# Dev SYS AWS account - use production ARN when available
+# TODO: Dev SYS AWS account - use production ARN when available
 LAYER_ARN=arn:aws:lambda:eu-west-1:777293634910:layer:sys-layer-ruby-pg:1
 URL=$(aws lambda get-layer-version-by-arn --arn $LAYER_ARN --query Content.Location --output text)
 curl -s $URL -o sys-layer-ruby-pg.zip
