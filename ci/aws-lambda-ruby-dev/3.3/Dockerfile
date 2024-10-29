@@ -3,11 +3,10 @@ FROM public.ecr.aws/lambda/ruby:3.3
 # Don't complain if bundler is run as root
 ENV BUNDLE_SILENCE_ROOT_WARNING=1
 
-RUN yum install -y amazon-linux-extras yum-utils \
-  && yum-config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo \
-  && amazon-linux-extras enable postgresql14 \
-  && yum install -y \
-  postgresql \
+RUN dnf install -y 'dnf-command(config-manager)' \
+  && dnf-3 config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo \
+  && dnf install -y \
+  postgresql15 \
   postgresql-devel \
   sqlite-devel \
   openssl-devel \
@@ -17,7 +16,7 @@ RUN yum install -y amazon-linux-extras yum-utils \
   gcc-c++ \
   git \
   gh \
-  && yum clean all \
+  && dnf clean all \
   && rm -rf /var/cache/yum
 
 RUN gem install bundler
