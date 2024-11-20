@@ -17,8 +17,14 @@ RUN yum install -y amazon-linux-extras yum-utils \
   gcc-c++ \
   git \
   gh \
+  tar \
   && yum clean all \
   && rm -rf /var/cache/yum
+
+# Acquire a version of node20 that will run on AL2
+RUN mkdir /node_al2 \
+  && curl -SL https://unofficial-builds.nodejs.org/download/release/v20.10.0/node-v20.10.0-linux-x64-glibc-217.tar.gz \
+  | tar xz --strip-components 1 -C /node_al2
 
 RUN gem install bundler
 
