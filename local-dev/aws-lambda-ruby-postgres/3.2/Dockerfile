@@ -1,6 +1,7 @@
 FROM ghcr.io/university-of-york/faculty-dev-docker-images/ci/aws-lambda-ruby-dev:3.2 as app-build
 
 # We must install rerun in a dev image that has build tools installed
+RUN gem install ffi -- --enable-system-libffi
 RUN gem install rerun:'~> 0.13'
 
 ###############################################################################
