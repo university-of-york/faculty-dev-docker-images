@@ -18,7 +18,6 @@ RUN yum install -y amazon-linux-extras yum-utils \
   git \
   gh \
   tar \
-  libffi-devel \
   && yum clean all \
   && rm -rf /var/cache/yum
 
