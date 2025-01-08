@@ -1,7 +1,8 @@
 FROM ghcr.io/university-of-york/faculty-dev-docker-images/ci/aws-lambda-ruby-dev:3.2 as app-build
 
 # We must install rerun in a dev image that has build tools installed
-RUN gem install rerun:'~> 0.13'
+# Build from source to avoid compatability issues with binary packages
+RUN gem install rerun:'~> 0.13' --platform ruby
 
 ###############################################################################
 FROM ghcr.io/university-of-york/faculty-dev-docker-images/ci/aws-lambda-ruby-postgres:3.2
