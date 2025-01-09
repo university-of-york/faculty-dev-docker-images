@@ -18,6 +18,7 @@ RUN yum install -y amazon-linux-extras yum-utils \
   git \
   gh \
   tar \
+  xz \
   && yum clean all \
   && rm -rf /var/cache/yum
 
