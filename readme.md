@@ -2,6 +2,15 @@
 
 Useful images to use in workflows.
 
+The content of this repository is made available to the public 
+under the MIT license, as others may find our dev / CI setup 
+useful or at least educational.
+
+Built artifacts contain a mere aggregation of other open source 
+software which is available under separate licenses - see the 
+documentation included with a specific piece of software in the 
+image for details.
+
 ## AWS Lambda Ruby
 
 ### CI
