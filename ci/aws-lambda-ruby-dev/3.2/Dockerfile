@@ -5,8 +5,26 @@ ENV BUNDLE_SILENCE_ROOT_WARNING=1
 
 RUN yum install -y amazon-linux-extras yum-utils \
   && yum-config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo \
-  && amazon-linux-extras enable postgresql14 \
-  && yum install -y \
+  && amazon-linux-extras enable postgresql14
+
+# Hopefully a temporary fix until AWS include the mirror for openssl-snapsafe-libs in the base Lambda image
+# Mirror needs be added after command enabling postgresql14, otherwise any pre-existing amzn2-extras.repo is
+# overwritten. See https://github.com/aws/aws-lambda-base-images/issues/245
+RUN <<EOF
+cat >> /etc/yum.repos.d/amzn2-extras.repo << 'EOREPO'
+[amzn2extra-openssl-snapsafe]
+name=Amazon Extras repo for openssl-snapsafe
+enabled=1
+mirrorlist=$awsproto://$amazonlinux.$awsregion.$awsdomain/2/extras/openssl-snapsafe/latest/$basearch/mirror.list
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-amazon-linux-2
+priority=10
+skip_if_unavailable=1
+report_instanceid=yes
+EOREPO
+EOF
+
+RUN yum install -y \
   postgresql \
   postgresql-devel \
   sqlite-devel \
