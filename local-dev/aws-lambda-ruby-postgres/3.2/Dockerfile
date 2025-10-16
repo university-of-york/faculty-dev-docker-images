@@ -11,7 +11,8 @@ FROM ghcr.io/university-of-york/faculty-dev-docker-images/ci/aws-lambda-ruby-pos
 COPY --from=app-build /var/lang /var/lang
 
 # Open port for local development
-EXPOSE 9292
+# FD-2350 - We're changing network driver to host mode, so we don't need to expose this port
+# EXPOSE 9292
 
 # Use /bundle for gems
 ENV GEM_PATH /bundle
