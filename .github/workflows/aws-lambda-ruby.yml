@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         image: [aws-lambda-ruby-dev, aws-lambda-ruby-postgres]
-        ruby: [2.7, 3.2, 3.3]
+        ruby: [2.7, 3.2, 3.3, 3.4]
     name: Build ci/${{ matrix.image }}:${{ matrix.ruby }}
     steps:
       - uses: actions/checkout@v4
@@ -57,7 +57,7 @@ jobs:
       fail-fast: false
       matrix:
         image: [aws-lambda-ruby-dev, aws-lambda-ruby-postgres]
-        ruby: [2.7, 3.2, 3.3]
+        ruby: [2.7, 3.2, 3.3, 3.4]
     name: Build local-dev/${{ matrix.image }}:${{ matrix.ruby }}
     steps:
       - uses: actions/checkout@v4
