@@ -1,4 +1,4 @@
-name: Build AWS Lambda Ruby images
+name: Build AWS Lambda Ruby images for Ruby 3.4
 
 on:
   push:
@@ -23,21 +23,20 @@ jobs:
       fail-fast: false
       matrix:
         image: [aws-lambda-ruby-dev, aws-lambda-ruby-postgres]
-        ruby: [2.7, 3.2, 3.3]
-    name: Build ci/${{ matrix.image }}:${{ matrix.ruby }}
+    name: Build ci/${{ matrix.image }}:3.4
     steps:
       - uses: actions/checkout@v4
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
-        if: hashFiles(format('ci/{0}/{1}/get-dependencies.sh', matrix.image, matrix.ruby)) != ''
+        if: hashFiles(format('ci/{0}/3.4/get-dependencies.sh', matrix.image)) != ''
         with:
-          role-to-assume: ${{ vars.LINUX_LAYER_ROLE_ARN }}
+          role-to-assume: ${{ vars.LINUX_LAYER_ROLE_ARN_SANDBOX }}
           role-duration-seconds: 1800
           aws-region: eu-west-1
       - name: Get image dependencies
         run: ./get-dependencies.sh
-        if: hashFiles(format('ci/{0}/{1}/get-dependencies.sh', matrix.image, matrix.ruby)) != ''
-        working-directory: ci/${{ matrix.image }}/${{ matrix.ruby }}
+        if: hashFiles(format('ci/{0}/3.4/get-dependencies.sh', matrix.image)) != ''
+        working-directory: ci/${{ matrix.image }}/3.4
       - uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -46,10 +45,10 @@ jobs:
       - name: Build image
         uses: docker/build-push-action@v5
         with:
-          context: ci/${{ matrix.image }}/${{ matrix.ruby }}
+          context: ci/${{ matrix.image }}/3.4
           pull: true
           push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/${{ github.repository }}/ci/${{ matrix.image }}:${{ matrix.ruby }}
+          tags: ghcr.io/${{ github.repository }}/ci/${{ matrix.image }}:3.4
   ruby-local-images:
     runs-on: ubuntu-latest
     needs: ruby-dev-images
@@ -57,8 +56,7 @@ jobs:
       fail-fast: false
       matrix:
         image: [aws-lambda-ruby-dev, aws-lambda-ruby-postgres]
-        ruby: [2.7, 3.2, 3.3]
-    name: Build local-dev/${{ matrix.image }}:${{ matrix.ruby }}
+    name: Build local-dev/${{ matrix.image }}:3.4
     steps:
       - uses: actions/checkout@v4
       - uses: docker/login-action@v3
@@ -69,7 +67,7 @@ jobs:
       - name: Build image
         uses: docker/build-push-action@v5
         with:
-          context: local-dev/${{ matrix.image }}/${{ matrix.ruby }}
+          context: local-dev/${{ matrix.image }}/3.4
           pull: true
           push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/${{ github.repository }}/local-dev/${{ matrix.image }}:${{ matrix.ruby }}
+          tags: ghcr.io/${{ github.repository }}/local-dev/${{ matrix.image }}:3.4
