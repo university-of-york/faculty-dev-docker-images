@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/ruby:3.3
+FROM public.ecr.aws/lambda/ruby:3.4
 
 # Don't complain if bundler is run as root
 ENV BUNDLE_SILENCE_ROOT_WARNING=1

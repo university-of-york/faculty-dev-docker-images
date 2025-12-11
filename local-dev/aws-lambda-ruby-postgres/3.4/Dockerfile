@@ -1,10 +1,10 @@
-FROM ghcr.io/university-of-york/faculty-dev-docker-images/ci/aws-lambda-ruby-dev:3.3 as app-build
+FROM ghcr.io/university-of-york/faculty-dev-docker-images/ci/aws-lambda-ruby-dev:3.4 as app-build
 
 # We must install rerun in a dev image that has build tools installed
 RUN gem install rerun:'~> 0.13'
 
 ###############################################################################
-FROM ghcr.io/university-of-york/faculty-dev-docker-images/ci/aws-lambda-ruby-postgres:3.3
+FROM ghcr.io/university-of-york/faculty-dev-docker-images/ci/aws-lambda-ruby-postgres:3.4
 
 # Pick up rerun gem from build stage
 COPY --from=app-build /var/lang /var/lang
