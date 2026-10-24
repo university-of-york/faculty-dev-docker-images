@@ -36,7 +36,7 @@ This is the dev CI image tweaked for local development work (with docker-compose
 
 It will install gems into `/bundler`, which should be a volume shared with the `app` container, so this image can
 install the gems, and the app can use them (see 
-[sinatra-base](https://github.com/university-of-york/faculty-dev-sinatra-base/blob/main/docker-compose.yml))
+[sinatra-base](https://github.com/university-of-york/faculty-dev-sinatra-base/blob/main/docker-compose.yml)
 for an example).
 
 #### ghcr.io/university-of-york/faculty-dev-docker-images/local-dev/aws-lambda-ruby-postgres:2.7
